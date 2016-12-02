@@ -5,6 +5,7 @@ from displays import gamescreen
 from displays import titlescreen
 from displays import difficultyscreen
 from displays import optionscreen
+from displays import scorescreen
 
 class App(cevent.CEvent):
     def __init__(self):
@@ -23,25 +24,25 @@ class App(cevent.CEvent):
         pygame.font.init()
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
-        #load images
+        # load images
         self._background = pygame.image.load(os.path.join(os.getcwd(), "res", "background.png")).convert()
         self.icon = pygame.image.load(os.path.join(os.getcwd(), "res", "icon.png")).convert_alpha()
         self._current_screen = titlescreen.TitleScreen()
 
-        #set settings
+        # set settings
         pygame.mouse.set_visible(False)
         pygame.display.set_caption("Snake")
         pygame.display.set_icon(self.icon)
 
     def on_loop(self):
-        #changes in logic
-        if type(self._current_screen) is gamescreen.GameScreen:
-            self._current_screen.track_logic()
-            if self._current_screen.is_game_over():
-                self.set_high_score()
-                print("Switching to Title Screen...")
-                self._current_screen = titlescreen.TitleScreen()
-
+        '''
+        @purpose: Handles all changes in logic
+        @summary: checks type of screen it is and for key variables within to decide whether to change screens
+        :return:
+        '''
+        '''
+        Title Screen
+        '''
         if type(self._current_screen) is titlescreen.TitleScreen:
             if self._current_screen.quit:
                 print("Quitting...")
@@ -54,7 +55,9 @@ class App(cevent.CEvent):
                 self._current_screen = optionscreen.OptionScreen()
                 print("Switching to Option Screen...")
                 return
-
+        '''
+        Difficulty Screen
+        '''
         if type(self._current_screen) is difficultyscreen.DifficultyScreen:
             if self._current_screen.play:
                 self._current_screen = gamescreen.GameScreen(self._current_screen.diff)
@@ -63,7 +66,25 @@ class App(cevent.CEvent):
             if self._current_screen.back:
                 print("Switching to Title Screen...")
                 self._current_screen = titlescreen.TitleScreen()
-
+        '''
+        Game Screen
+        '''
+        if type(self._current_screen) is gamescreen.GameScreen:
+            self._current_screen.track_logic()
+            if self._current_screen.is_game_over():
+                print("Switching to Score Screen...")
+                self._current_screen = scorescreen.ScoreScreen(self._current_screen.score, self._current_screen.diff)
+                self.set_high_score()
+        '''
+        Score Screen
+        '''
+        if type(self._current_screen) is scorescreen.ScoreScreen:
+            if self._current_screen.back:
+                print("Switching to Title Screen...")
+                self._current_screen = titlescreen.TitleScreen()
+        '''
+        Option Screen
+        '''
         if type(self._current_screen) is optionscreen.OptionScreen:
             if self._current_screen.back:
 
@@ -83,10 +104,10 @@ class App(cevent.CEvent):
             highscore_file.close()
 
     def on_render(self):
-        #drawing
+        # drawing
         self._display_surf.blit(self._background, (0, 0))
         self._current_screen.render(self._display_surf)
-        #finish drawing
+        # finish drawing
         pygame.display.flip()
 
     def on_exit(self):

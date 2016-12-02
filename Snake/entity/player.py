@@ -1,4 +1,3 @@
-import os
 import pygame
 import entity.entity as entity
 
@@ -21,10 +20,10 @@ class Player(entity.Entity):
     def load_images(self):
         images = dict()
         #faces
-        images["f_left"] =  self.image.subsurface(pygame.Rect((0, 16), (16, 16)))
+        images["f_left"] = self.image.subsurface(pygame.Rect((0, 16), (16, 16)))
         images["f_right"] = self.image.subsurface(pygame.Rect((16, 16), (16, 16)))
-        images["f_up"] =    self.image.subsurface(pygame.Rect((0, 0), (16, 16)))
-        images["f_down"] =  self.image.subsurface(pygame.Rect((16, 0), (16, 16)))
+        images["f_up"] = self.image.subsurface(pygame.Rect((0, 0), (16, 16)))
+        images["f_down"] = self.image.subsurface(pygame.Rect((16, 0), (16, 16)))
         #turns
         images["topleft"] = self.image.subsurface(pygame.Rect((0, 32), (16, 16)))
         images["topright"] = self.image.subsurface(pygame.Rect((16, 32), (16, 16)))

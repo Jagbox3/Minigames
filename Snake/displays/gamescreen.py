@@ -10,6 +10,7 @@ class GameScreen(screen.Screen):
         super().__init__()
         self.diff = diff
         speeds = [80, 50, 25, 5]
+        self.high_score = self.load_high_score()
         self.game_speed = speeds[diff]
         image1 = pygame.image.load(os.path.join(os.getcwd(), "res", "snake.png"))
         self.bg = image1.subsurface(pygame.Rect((32, 48), (16,16)))
@@ -23,7 +24,9 @@ class GameScreen(screen.Screen):
                 surf.blit(self.bg, (16 * a, b * 16))
         self.entities[1].draw(surf)
         self.entities[0].draw(surf)
-        surf.blit(self.font.render("Score- %i" % self.score, False, (0, 255, 255)), (0, 2))
+        surf.blit(self.font.render("Score- %i" % self.score, False, (0, 255, 255)), (24, 2))
+        surf.blit(self.font.render("Highscore- %s" % self.high_score, False, (0, 255, 255)),
+                  (624 - sum(c.isdigit() for c in str(self.high_score)) * 17, 2))
         # wait
         pygame.time.wait(self.game_speed)
 
@@ -38,6 +41,12 @@ class GameScreen(screen.Screen):
         self.entities[1].new_pos()
         self.entities[0].grow = True
         print("Score: %i" % self.score)
+
+    def load_high_score(self):
+        highscore_file = open(os.path.join(os.getcwd(), "res", "highscore.txt"), "r")
+        lines = highscore_file.readlines()
+        highscore_file.close()
+        return lines[self.diff].rstrip()
 
     def on_key_down(self, event):
         if event.key == 273 and self.entities[0].direction is not "DOWN":
