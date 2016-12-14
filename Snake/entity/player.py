@@ -2,9 +2,8 @@ import pygame
 import entity.entity as entity
 
 class Player(entity.Entity):
-    def __init__(self, pos, image):
-        super().__init__(pos, image)
-        #these positions can go from 0 to 49, where 0 and 49 are dead zones
+    def __init__(self, pos, image, screen_width, screen_height):
+        self.image = image
         self.x = [1] * 3
         self.y = [1] * 3
         for a in range(3):
@@ -16,6 +15,8 @@ class Player(entity.Entity):
         self.direction = "RIGHT"
         self.game_over = False
         self.grow = False
+        self.max_width = screen_width
+        self.max_height = screen_height
 
     def load_images(self):
         images = dict()
@@ -120,9 +121,9 @@ class Player(entity.Entity):
             if index > 4 and self.x[0] is self.x[index] and self.y[0] is self.y[index]:
                 self.game_over = True
                 print("Game Over")
-        if self.x[0] == 0 or self.x[0] == 49:
+        if self.x[0] <= 0 or self.x[0] >= int(self.max_width / 16):
             self.game_over = True
             print("Game Over")
-        if self.y[0] == 0 or self.y[0] == 49:
+        if self.y[0] <= 0 or self.y[0] >= int(self.max_height / 16):
             self.game_over = True
             print("Game Over")

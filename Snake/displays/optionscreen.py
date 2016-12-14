@@ -9,10 +9,10 @@ class OptionScreen(screen.Screen):
         self.images = dict()
         self.back = False
         self.font = pygame.font.Font(os.path.join(os.getcwd(), "res", "8bit.ttf"), 16)
-        self.entities = [message.Message((225, 300), "Reset Highscores", True, 24)]
+        self.entities = [message.Message((int(0.28125 * self.width), int(self.width * 0.375)), "Reset Highscores", True, 24)]
     def render(self, surf):
-        surf.blit(self.font.render("[ESC] Back", False, (0, 0, 0)), (20, 750))
-        surf.blit(self.font.render("[ENTER] Select", False, (0, 0, 0)), (555, 750))
+        surf.blit(self.font.render("[ESC] Back", False, (0, 0, 0)), (int(0.025 * self.width), int(0.9375 * self.height)))
+        surf.blit(self.font.render("[ENTER] Select", False, (0, 0, 0)), (int(0.69375 * self.width), int(0.9375 * self.height)))
         for entity in self.entities:
             entity.draw(surf)
     def on_key_down(self, event):

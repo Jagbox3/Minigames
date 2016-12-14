@@ -11,7 +11,7 @@ class DifficultyScreen(screen.Screen):
         self.diff = 0
         self.entities = []
         self.load_highscores()
-        self.font = pygame.font.Font(os.path.join(os.getcwd(), "res", "8bit.ttf"), 16)
+        self.font = pygame.font.Font(os.path.join(os.getcwd(), "res", "8bit.ttf"), int(0.02 * self.width))
 
     def load_highscores(self):
         highscore_file = open(os.path.join(os.getcwd(), "res", "highscore.txt"))
@@ -28,17 +28,17 @@ class DifficultyScreen(screen.Screen):
         if d is "":
             d = "None"
         highscore_file.close()
-        hs_easy = message.Message((250, 300),   "Peckish  (%s)" % a.rsplit()[0], True, 24)
-        hs_medium = message.Message((250, 350), "Craving  (%s)" % b.rsplit()[0], False, 24)
-        hs_hard = message.Message((250, 400),   "Hungry   (%s)" % c.rsplit()[0], False, 24)
-        hs_insane = message.Message((250, 450), "Starving (%s)" % d.rsplit()[0], False, 24)
+        hs_easy = message.Message((int(0.3125 * self.width), int(0.375 * self.height)),   "Peckish  (%s)" % a.rsplit()[0], True, int(0.03 * self.width))
+        hs_medium = message.Message((int(0.3125 * self.width), int(0.4375 * self.height)), "Craving  (%s)" % b.rsplit()[0], False, int(0.03 * self.width))
+        hs_hard = message.Message((int(0.3125 * self.width), int(0.5 * self.height)),   "Hungry   (%s)" % c.rsplit()[0], False, int(0.03 * self.width))
+        hs_insane = message.Message((int(0.3125 * self.width), int(0.5625 * self.height)), "Starving (%s)" % d.rsplit()[0], False, int(0.03 * self.width))
         self.entities.append(hs_easy)
         self.entities.append(hs_medium)
         self.entities.append(hs_hard)
         self.entities.append(hs_insane)
     def render(self, surf):
-        surf.blit(self.font.render("[ESC] Back", False, (0, 0, 0)), (20, 750))
-        surf.blit(self.font.render("[ENTER] Select", False, (0, 0, 0)), (555, 750))
+        surf.blit(self.font.render("[ESC] Back", False, (0, 0, 0)), (int(0.025 * self.width), int(0.9375 * self.height)))
+        surf.blit(self.font.render("[ENTER] Select", False, (0, 0, 0)), (int(0.69375 * self.width), int(0.9375 * self.height)))
         for entity in self.entities:
             entity.draw(surf)
     def on_key_down(self, event):

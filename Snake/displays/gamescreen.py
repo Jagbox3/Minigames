@@ -9,27 +9,25 @@ class GameScreen(screen.Screen):
     def __init__(self, diff):
         super().__init__()
         self.diff = diff
-        speeds = [80, 50, 25, 5]
+        speeds = [0.1, 0.0625, 0.03125, 0.00625]
         self.high_score = self.load_high_score()
         self.game_speed = speeds[diff]
         image1 = pygame.image.load(os.path.join(os.getcwd(), "res", "snake.png"))
-        self.bg = image1.subsurface(pygame.Rect((32, 48), (16,16)))
-        self.entities = [player.Player((60, 60), image1), goal.Goal((0, 0), image1.subsurface(pygame.Rect((48, 48), (16, 16))))]
-        self.font = pygame.font.Font(os.path.join(os.getcwd(), "res", "8bit.ttf"), 14)
+        self.entities = [player.Player((4, 9), image1, self.width, self.height), goal.Goal((0, 0), image1.subsurface(pygame.Rect((48, 48), (16, 16))), self.width, self.height)]
+        self.font = pygame.font.Font(os.path.join(os.getcwd(), "res", "8bit.ttf"), int(0.0175 * self.width))
         self.score = 0
 
     def render(self, surf):
-        for a in range(1, 49):
-            for b in range(1, 49):
-                surf.blit(self.bg, (16 * a, b * 16))
         self.entities[1].draw(surf)
         self.entities[0].draw(surf)
-        surf.blit(self.font.render("Score- %i" % self.score, False, (0, 255, 255)), (24, 2))
-        surf.blit(self.font.render("Highscore- %s" % self.high_score, False, (0, 255, 255)),
-                  (624 - sum(c.isdigit() for c in str(self.high_score)) * 17, 2))
+        surf.blit(self.font.render("Score- %i" % self.score, False, (0, 255, 255)), (int(0.03 * self.width), 2))
+        surf.blit(self.font.render("Highscore- %s" % self.highest_score(), False, (0, 255, 255)),
+                  (int(0.78 * self.width) - sum(c.isdigit() for c in str(self.highest_score())) * 17, 2))
         # wait
-        pygame.time.wait(self.game_speed)
+        pygame.time.wait(int(self.game_speed * self.width))
 
+    def highest_score(self):
+        return self.high_score if int(self.high_score) > self.score else str(self.score)
     def track_logic(self):
         self.entities[0].move()
         self.entities[0].check_bounds()

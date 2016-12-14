@@ -16,8 +16,8 @@ class App(cevent.CEvent):
         options_file = open(os.path.join(os.getcwd(), "res", "options.txt"))
         screen_size = options_file.readline().strip().split(",")
         options_file.close()
-        print(int(screen_size[0]), int(screen_size[1]))
-        self.size = self.width, self.height = int(screen_size[0]), int(screen_size[1])
+        self.width, self.height = int(screen_size[0]), int(screen_size[1])
+        self.size = self.width * 16, self.height * 16
 
     def on_init(self):
         pygame.init()
@@ -105,7 +105,15 @@ class App(cevent.CEvent):
 
     def on_render(self):
         # drawing
-        self._display_surf.blit(self._background, (0, 0))
+        dark_square = self._background.subsurface(pygame.Rect((0, 0), (16, 16)))
+        light_square = self._background.subsurface(pygame.Rect((16, 0), (16, 16)))
+        for y in range(self.height):
+            for x in range(self.width):
+                if y == 0 or y == self.height - 1 or x == 0 or x == self.width - 1:
+                    self._display_surf.blit(dark_square, (x * 16, y * 16))
+                else:
+                    self._display_surf.blit(light_square, (x * 16, y * 16))
+                    #surf.blit(image, (self.x[index] * 16, self.y[index] * 16))
         self._current_screen.render(self._display_surf)
         # finish drawing
         pygame.display.flip()
@@ -137,7 +145,6 @@ class App(cevent.CEvent):
     def on_mouse_move(self, event):
         self._mouse_pos[0] = event.pos[0]
         self._mouse_pos[1] = event.pos[1]
-
 
 if __name__ == "__main__":
     theApp = App()
