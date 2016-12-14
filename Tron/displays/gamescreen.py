@@ -11,7 +11,6 @@ class GameScreen(screen.Screen):
         image1 = pygame.image.load(os.path.join(os.getcwd(), "res", "player.png"))
         self.entities = [player.Player(0, image1, self.width, self.height), player.Player(1, image1, self.width, self.height)]
         self.font = pygame.font.Font(os.path.join(os.getcwd(), "res", "8bit.ttf"), int(0.0175 * self.width))
-        self.winner = -1
 
     def render(self, surf):
         for entity in self.entities:
@@ -27,10 +26,11 @@ class GameScreen(screen.Screen):
         for a in range(2):
             for index in range(self.entities[0].length - 1, -1, -1):
                 if self.entities[a].x[0] is self.entities[(a + 1) % 2].x[index] and self.entities[a].y[0] is self.entities[(a + 1) % 2].y[index]:
-                    self.entities[(a + 1) % 2].game_over = True
-                    self.winner = a
+                    self.entities[a].game_over = True
                     print("Game Over")
 
+    def get_winner(self):
+        return 1 if self.entities[0].game_over else 0
     def on_key_down(self, event):
         print(event.key)
         #Player 1:

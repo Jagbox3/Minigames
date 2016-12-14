@@ -49,10 +49,6 @@ class App(cevent.CEvent):
                 self._current_screen = gamescreen.GameScreen()
                 print("Switching to Game Screen...")
                 return
-            if self._current_screen.options:
-                self._current_screen = optionscreen.OptionScreen()
-                print("Switching to Option Screen...")
-                return
         '''
         Game Screen
         '''
@@ -60,7 +56,7 @@ class App(cevent.CEvent):
             self._current_screen.track_logic()
             if self._current_screen.is_game_over():
                 print("Switching to Score Screen...")
-                self._current_screen = scorescreen.ScoreScreen(self._current_screen.winner)
+                self._current_screen = scorescreen.ScoreScreen(self._current_screen.get_winner())
         '''
         Score Screen
         '''
